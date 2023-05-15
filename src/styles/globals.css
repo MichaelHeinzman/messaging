@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* html, body, heading */
+@layer base {
+  body {
+    @apply bg-[#141414] text-white overflow-x-hidden bg-gradient-background mx-auto;
+  }
+}
+
+/* custom classNames */
+@layer components {
+  .input {
+    @apply w-full border-2 bg-[#FFFFFF26] border-white shadow-md rounded-lg py-3.5 px-5 placeholder-[white] outline-none focus:bg-[#454545];
+  }
+  .typing-ball {
+    @apply rounded-full bg-white h-2 w-2;
+  }
+
+  .scrollbar {
+    @apply !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-cyan-50 !scrollbar-corner-orange-200;
+  }
+}
