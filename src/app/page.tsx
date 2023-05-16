@@ -1,11 +1,11 @@
 "use client";
 
 import Conversation from "@/components/Conversation";
-import Messages from "@/components/Messages";
+import ConversationList from "@/components/ConversationsList";
 import useAuth from "@/hooks/useAuth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../../firebase";
 import { Conversation as ConversationType } from "../../typings";
 import { useRecoilState } from "recoil";
@@ -29,15 +29,10 @@ export default function Home() {
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const conversations: Conversation[] = snapshot.docs.map(
-          (doc) => doc.data() as Conversation
-        );
+        const conversations: ConversationType[] = snapshot.docs.map((doc) => {
+          return doc.data() as Conversation;
+        });
         setConversations(conversations);
-        if (!currentConversation) {
-          setCurrentConversation(
-            conversations.length > 0 ? conversations[0] : null
-          );
-        }
       });
 
       return () => unsubscribe(); // Unsubscribe from the listener when component unmounts or when the dependency changes
@@ -45,7 +40,15 @@ export default function Home() {
       setConversations(null);
       setCurrentConversation(null);
     }
-  }, [currentConversation, setCurrentConversation, user, user?.uid]);
+  }, [setCurrentConversation, user, user?.uid]);
+
+  const foundConversation = useMemo(
+    () =>
+      conversations?.find(
+        (convo: ConversationType) => convo.id === currentConversation?.id
+      ),
+    [conversations, currentConversation?.id]
+  );
 
   if (loading) return null;
 
@@ -57,18 +60,10 @@ export default function Home() {
       </Head>
       <main className="flex justify-start items-start h-full">
         <div className="hidden md:flex w-1/3 lg:w-1/5 h-full">
-          <Messages conversations={conversations} />
+          <ConversationList conversations={conversations} />
         </div>
-        {currentConversation && (
-          <Conversation
-            key={currentConversation.id}
-            id={currentConversation.id}
-            creator={currentConversation.creator}
-            name={currentConversation.name}
-            members={currentConversation.members}
-            recentMessage={currentConversation.recentMessage}
-          />
-        )}
+
+        {foundConversation && <Conversation {...foundConversation} />}
 
         <button
           className="m-2 p-2 cursor-pointer border-2 border-solid border-white rounded-md"

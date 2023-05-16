@@ -4,14 +4,12 @@ import { Conversation } from "../../typings";
 import useAuth from "@/hooks/useAuth";
 import { Timestamp } from "firebase/firestore";
 import { sendMessageInGroup, updateTypingArray } from "@/firestore/firestore";
-import { useMessageSnapshot } from "@/hooks/useMessageSnapshot";
-import { useTypingSnapshot } from "@/hooks/useTypingSnapshot";
 import { useBeforeUnload } from "@/hooks/useBeforeUnload";
+import { User } from "firebase/auth";
+import Messages from "./Messages";
 
-const Conversation = ({ members, creator, id, name }: Conversation) => {
+const Conversation = ({ id, name, typing: typingArray }: Conversation) => {
   const { user } = useAuth();
-  const { messages } = useMessageSnapshot(id, user);
-  const { typingArray } = useTypingSnapshot(id);
   const [message, setMessage] = useState<string>("");
   const [typing, setTyping] = useState(false);
   const [sending, setSending] = useState(false);
@@ -25,6 +23,8 @@ const Conversation = ({ members, creator, id, name }: Conversation) => {
   useEffect(() => {
     if (message.length > 0 && typing === false) {
       setTyping(true);
+      if (!typingArray.some((user2: User) => user2.uid === user?.uid))
+        console.log(typingArray);
       updateTypingArray(id, user, "add");
     }
 
@@ -32,7 +32,7 @@ const Conversation = ({ members, creator, id, name }: Conversation) => {
       setTyping(false);
       updateTypingArray(id, user, "remove");
     }
-  }, [id, message, typing, user]);
+  }, [id, message, typing, typingArray, user]);
 
   const handleSend = async () => {
     if (!sending) {
@@ -60,7 +60,6 @@ const Conversation = ({ members, creator, id, name }: Conversation) => {
     }
   };
 
-  console.log(typingArray);
   return (
     <section className="w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center py-5 px-3 space-y-5">
       {/* Title */}
@@ -74,16 +73,13 @@ const Conversation = ({ members, creator, id, name }: Conversation) => {
       </div>
 
       {/* Messages */}
-      <div className="w-full lg:w-[89%] max-h-full h-screen flex flex-col justify-start space-y-2 overflow-y-auto sm:px-3 md:px-6 sticky top-0 scrollbar">
-        {messages?.map((message) => (
-          <Message key={message.id} {...message} />
-        ))}
-      </div>
+      <Messages conversationId={id} />
+
       {/* Typing */}
-      {typingArray.length > 0 && (
+      {typingArray?.length > 0 && (
         <div className="w-4/6 h-4 flex justify-start items-end pl-2 space-x-2">
           <div className="text-sm max-w-full text-center h-full overflow-hidden whitespace-nowrap overflow-ellipsis">
-            {typingArray?.map((user) => user.displayName).join(", ")}
+            {typingArray?.map((user: User) => user.displayName).join(", ")}
           </div>
           <div className="h-full flex justify-start items-end space-x-1">
             <div className="typing-ball animate-pulse animation-delay-75"></div>

@@ -25,7 +25,6 @@ const Message = ({ sender, text, id, groupId }: Message) => {
         const userData = await getUserData(sender);
 
         // Access the retrieved user data here and perform further operations
-        console.log(userData);
         setWriter(userData); // Set the writer state with the retrieved user data
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -39,6 +38,7 @@ const Message = ({ sender, text, id, groupId }: Message) => {
 
     fetchUserData();
   }, [getUserData, groupId, id, read, sender, setWriter, user?.uid]);
+
   const handleDelete = () => deleteMessageInGroup(id, groupId);
   return (
     <div className="w-full flex flex-col">

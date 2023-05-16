@@ -8,7 +8,7 @@ import { markMessageAsReadInGroup } from "@/firestore/firestore";
 export const useMessageSnapshot = (id: string, user: User | null) => {
   const [messages, setMessages] = useState<MessageType[] | null>();
   useEffect(() => {
-    if (user == null) return;
+    if (user === null || !id) return;
     const messageRef = collection(db, "message", id, "messages");
     const messagesQuery = query(messageRef, orderBy("timestamp"));
 
