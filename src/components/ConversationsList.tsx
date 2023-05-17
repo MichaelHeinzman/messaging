@@ -9,11 +9,10 @@ type Props = {
   conversations: Conversation[] | null | undefined;
 };
 
-
 const Messages = ({ conversations }: Props) => {
   const [searchText, setSearchText] = useState("");
   const [create, setCreate] = useState(false);
-
+  const [selected, setSelected] = useState<String | null>(null);
 
   const filteredConversations = conversations?.filter((conversation) => {
     // Filter based on conversation name
@@ -40,9 +39,7 @@ const Messages = ({ conversations }: Props) => {
           />
         </p>
       </div>
-      {create && (
-        <CreateConversation setCreate={setCreate}/>
-      )}
+      {create && <CreateConversation setCreate={setCreate} />}
 
       <div className="w-full p-2">
         <input
@@ -52,9 +49,14 @@ const Messages = ({ conversations }: Props) => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="w-full max-h-screen overflow-y-auto pb-32 scrollbar-hide">
+      <div className="w-full max-h-screen overflow-y-auto pb-32 scrollbar-hide divide-y-2 divide-[#ffffff85]">
         {filteredConversations?.map((conversation) => (
-          <ConversationsListItem key={conversation.id} {...conversation} />
+          <ConversationsListItem
+            key={conversation.id}
+            {...conversation}
+            selected={selected}
+            setSelected={setSelected}
+          />
         ))}
       </div>
     </section>
