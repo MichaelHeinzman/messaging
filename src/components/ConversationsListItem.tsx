@@ -15,6 +15,9 @@ const MessagesListItem = ({
   const [currentConversation, setCurrentConversation] = useRecoilState(
     currentConversationState
   );
+
+  const isMessageRead = recentMessage?.readBy?.read?.includes(user?.uid || '');
+
   return (
     <div
       className="w-full h-[80px] flex flex-col"
@@ -30,13 +33,11 @@ const MessagesListItem = ({
     >
       <button className="w-full h-full hover:bg-[#ffffff26] flex justify-start items-center space-x-2 pr-2">
         <div className="w-1/4 flex justify-between items-center">
-          <div className=" w-full flex justify-center items-center pb-2">
-            {!recentMessage?.readBy?.read.includes(user?.uid) && (
+          <div className="w-full flex justify-center items-center pb-2">
+            {!isMessageRead && (
               <div className="rounded-full bg-[#00FFB2] w-2 h-2"></div>
             )}
-            {recentMessage?.readBy?.read.includes(user?.uid) && (
-              <div className="w-2 h-2"></div>
-            )}
+            {isMessageRead && <div className="w-2 h-2"></div>}
           </div>
 
           <div className="pb-2 flex justify-center items-center w-full">
@@ -46,7 +47,6 @@ const MessagesListItem = ({
 
         <div className="w-3/4 h-full flex flex-col justify-between items-start p-2">
           <div className="h-full text-left font-inter font-medium text-white text-lg line-clamp-1">
-            {/*members.map((user) => user.name).join(" & ")*/}
             {name}
           </div>
 
