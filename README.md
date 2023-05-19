@@ -7,8 +7,8 @@
 
 ## **Details**     
   Language : **TypeScript**     
-  Library : **React** 
-  Framework : **Next.js**
+  Library : **React**     
+  Framework : **Next.js**.   
   Design Tool : **Figma**   
   Deployed Using: **AWS App Runner**
    
