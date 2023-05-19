@@ -7,9 +7,11 @@ import {
   deleteMessageInGroup,
   updateMessagesReadArray,
 } from "@/firestore/firestore";
+import useAnimateInView from "@/hooks/useAnimateInView";
 
 const Message = ({ sender, text, id, groupId }: Message) => {
   const { user, getUserData } = useAuth();
+  const { motion, ref, controls, variants } = useAnimateInView();
   const [writer, setWriter] = useState<User | null>(null);
   const [clicked, setClicked] = useState(false);
   const [deleteClicked, setDeleteClicked] = useState(false);
@@ -41,28 +43,31 @@ const Message = ({ sender, text, id, groupId }: Message) => {
 
   const handleDelete = () => deleteMessageInGroup(id, groupId);
   return (
-    <div className="w-full flex flex-col">
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={self ? variants.messageSelf : variants.message}
+      className="w-full flex flex-col"
+    >
       <div
         className={`w-full  flex ${self ? "justify-end" : "justify-start"}`}
         onClick={() => setClicked((clicked) => self && !clicked)}
       >
         {/* Message */}
         <div className="w-3/4 md:w-4/6 lg:w-2/4 flex cursor-pointer">
-          <div
-            className={`w-1/4 h-full flex justify-center items-end ${
-              self ? "order-2" : "order-1"
-            }`}
-          >
-            <img
-              src={
-                self
-                  ? (user?.photoURL as string)
-                  : writer?.photoURL || profileImage
-              }
-              alt="person"
-              className="h-8 w-8 rounded-full bg-white"
-            />
-          </div>
+          {!self && (
+            <div
+              className={`w-1/4 h-full flex justify-center items-end order-1
+            `}
+            >
+              <img
+                src={writer?.photoURL || profileImage}
+                alt="person"
+                className="h-8 w-8 rounded-full bg-white"
+              />
+            </div>
+          )}
 
           <div className="w-full h-full flex flex-col order-1">
             <div
@@ -131,7 +136,7 @@ const Message = ({ sender, text, id, groupId }: Message) => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import useAuth from "@/hooks/useAuth";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { deleteGroup, leaveGroup } from "@/firestore/firestore";
+import useAnimateInView from "@/hooks/useAnimateInView";
 
 interface Props extends Conversation {
   selected: String | null;
@@ -24,8 +25,6 @@ const MessagesListItem = ({
   const [currentConversation, setCurrentConversation] = useRecoilState(
     currentConversationState
   );
-  const [swipeStarted, setSwipeStarted] = useState(false);
-
   const isMessageRead = recentMessage?.readBy?.read?.includes(user?.uid || "");
 
   const handleHover = () => {
@@ -41,13 +40,11 @@ const MessagesListItem = ({
     <div className="h-full w-full">
       <div
         className={`relative w-full h-20 flex flex-col transition-transform 300ms ${
-          selected ? "-translate-x-1/3" : "translate-x-0"
+          selected === id ? "-translate-x-1/3" : "translate-x-0"
         }`}
       >
         <button
           className={`w-full h-full z-10 hover:bg-[#ffffff26] flex justify-start items-center space-x-2 pr-2`}
-          onMouseEnter={handleHover}
-          onTouchStart={handleHover}
           onClick={() => {
             setSelected(null);
             setCurrentConversation({
@@ -86,9 +83,15 @@ const MessagesListItem = ({
         </button>
         <div
           className={`absolute w-1/6 h-full right-0 top-0 z-10 ${
-            selected === id ? "hidden" : "absolute"
+            selected === id ? "hidden w-0" : "absolute"
           }`}
           onMouseOver={handleHover}
+        ></div>
+        <div
+          className={`absolute w-5/6 h-full left-0 top-0 z-10 ${
+            selected === id ? "w-full" : "hidden"
+          }`}
+          onMouseOver={handleLeave}
         ></div>
         <div
           className={`absolute w-1/3 s -z-0 top-0 bottom-0 right-0 flex justify-center items-center cursor-pointer bg-red-500 shadow-inner shadow-[#ffffff26] translate-x-full`}

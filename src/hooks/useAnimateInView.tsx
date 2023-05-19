@@ -24,13 +24,17 @@ const useAnimateInView = () => {
   };
 
   const variants = {
-    text: {
-      visible: { opacity: 1, scale: 1, transition: { duration: 1 } },
-      hidden: { opacity: 0, scale: 0 },
+    messageSelf: {
+      visible: { opacity: 1, scale: 1, transition: { duration: 0.5 }, x: 0 },
+      hidden: { opacity: 0, scale: 0, x: 100 },
+    },
+    message: {
+      visible: { opacity: 1, scale: 1, transition: { duration: 0.75 }, x: 0 },
+      hidden: { opacity: 0, scale: 0, x: -100 },
     },
     svg: {
-      visible: { opacity: 1, scale: 1, transition: { duration: 1 }, x: 0 },
-      hidden: { opacity: 0, scale: 0, x: getBreakpointX() },
+      visible: { opacity: 1, scale: 1, transition: { duration: 1 }, y: 0 },
+      hidden: { opacity: 0, scale: 0, y: 100 },
     },
   };
 
@@ -42,7 +46,7 @@ const useAnimateInView = () => {
     }
   }, [controls, inView]);
 
-  return [motion, ref, controls, variants];
+  return { motion, ref, controls, variants };
 };
 
 export default useAnimateInView;
