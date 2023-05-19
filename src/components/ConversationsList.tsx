@@ -29,7 +29,7 @@ const Messages = ({ conversations }: Props) => {
   });
 
   return (
-    <section className="border-r-2  border-[#ffffff85] h-full w-full space-y-3 py-2">
+    <section className="order-r-2  border-[#ffffff85] h-full w-full space-y-3 py-2">
       <div className="px-2 font-inter pr-2 font-semibold text-white text-2xl leading-10 flex justify-between">
         <p>Messages</p>
         <p>
@@ -49,7 +49,7 @@ const Messages = ({ conversations }: Props) => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="w-full max-h-screen overflow-y-auto pb-32 scrollbar-hide divide-y-2 divide-[#ffffff85]">
+      <div className="w-full p-2 max-h-screen overflow-y-auto pb-32 scrollbar-hide divide-y-2 divide-[#ffffff85] overflow-hidden">
         {filteredConversations?.map((conversation) => (
           <ConversationsListItem
             key={conversation.id}
