@@ -41,11 +41,13 @@ const MessagesListItem = ({
     <div className="h-full w-full">
       <div
         className={`relative w-full h-20 flex flex-col transition-transform 300ms ${
-          swipeStarted ? "-translate-x-full" : "translate-x-0"
-        } ${selected === id && "-translate-x-1/3"}`}
+          selected ? "-translate-x-1/3" : "translate-x-0"
+        }`}
       >
         <button
           className={`w-full h-full z-10 hover:bg-[#ffffff26] flex justify-start items-center space-x-2 pr-2`}
+          onMouseEnter={handleHover}
+          onTouchStart={handleHover}
           onClick={() => {
             setSelected(null);
             setCurrentConversation({
@@ -83,8 +85,8 @@ const MessagesListItem = ({
           </div>
         </button>
         <div
-          className={`absolute w-1/3 h-full right-0 top-0 z-10 ${
-            selected === id && "hidden"
+          className={`absolute w-1/6 h-full right-0 top-0 z-10 ${
+            selected === id ? "hidden" : "absolute"
           }`}
           onMouseOver={handleHover}
         ></div>
