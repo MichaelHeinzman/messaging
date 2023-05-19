@@ -3,7 +3,7 @@
 
 
 ## View Chat App
-[Click to Preview](https://hip6g7mrvc.us-east-1.awsapprunner.com/)
+[Click to Preview](h[ttps://hip6g7mrvc.us-east-1.awsapprunner.com/](https://8urr7hhmpp.us-east-1.awsapprunner.com/)
 
 ## **Details**     
   Language : **TypeScript**     
