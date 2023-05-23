@@ -1,12 +1,20 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { Conversation, Message, User } from "../../typings";
+import { Conversation, User } from "../../typings";
 import { useMessageSnapshot } from "@/hooks/useMessageSnapshot";
 import useAuth from "@/hooks/useAuth";
+import CirclePacker from "./CirclePacker";
 
 type Props = {
   members: Conversation["members"];
   groupId: Conversation["id"];
 };
+
+interface CircleData {
+  id: string;
+  value: number;
+  photoURL: string;
+  displayName: string;
+}
 
 const GroupImageMembers = ({ members, groupId }: Props) => {
   const { user, getUserData } = useAuth();
@@ -26,30 +34,31 @@ const GroupImageMembers = ({ members, groupId }: Props) => {
     fetchUserProfiles();
   }, [getUserData, members, user]);
 
-  const number_of_members = members.length;
+  const data = useMemo(() => {
+    const formattedData: CircleData[] = userProfiles
+      .filter((profile) => profile !== null && profile?.photoURL)
+      .map((profile) => ({
+        id: profile?.displayName.charAt(0) || "",
+        value: 1,
+        photoURL: profile?.photoURL || "",
+        displayName: profile?.displayName || "",
+      }));
+    return {
+      id: "group",
+      children: formattedData,
+      value: 1,
+      displayName: "",
+      photoURL: "",
+    };
+  }, [userProfiles]);
+
   return (
-    <div
-      className={`rounded-full overflow-hidden w-10 h-10 bg-[#ffffff50] grid grid-flow-col-dense p-${
-        number_of_members > 2 && "p-1"
-      }`}
-    >
-      {userProfiles.map((user: User | null, index: number) => (
-        <div
-          key={user?.id}
-          className={`rounded-full overflow-hidden items-center justify-center ${
-            index % 2 === 1 && "z-10"
-          }`}
-        >
-          <img
-            src={user?.photoURL}
-            alt={user?.displayName}
-            className={`object-fit w-${
-              1 / number_of_members
-            } h-full rounded-full`}
-          />
-        </div>
-      ))}
-    </div>
+    <CirclePacker
+      data={data}
+      width={50}
+      height={50}
+      backgroundColor="#ffffff30"
+    />
   );
 };
 

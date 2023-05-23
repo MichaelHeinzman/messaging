@@ -38,13 +38,9 @@ const MessagesListItem = ({
 
   const handleDeleteGroup = () => leaveGroup(id, user?.uid || "");
   return (
-    <div
-      className={`overflow-hidden h-full w-full rounded-md ${
-        currentConversation?.id === id && "bg-purple-400"
-      }`}
-    >
+    <div className={`overflow-hidden h-full w-full `}>
       <div
-        className={`relative w-full h-20 flex flex-col transition-transform 300ms ${
+        className={`relative rounded-md w-full h-20 flex flex-col transition-transform 300ms ${
           selected === id ? "-translate-x-1/3" : "translate-x-0"
         }`}
       >
@@ -69,7 +65,7 @@ const MessagesListItem = ({
               {isMessageRead && <div className="w-2 h-2"></div>}
             </div>
 
-            <div className="pb-2 flex justify-center items-center w-full">
+            <div className="pb-2 flex justify-center items-center w-full h-full">
               <GroupImageMembers members={members} groupId={id} />
             </div>
           </div>
