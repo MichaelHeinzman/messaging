@@ -35,22 +35,32 @@ const GroupImageMembers = ({ members, groupId }: Props) => {
   }, [getUserData, members, user]);
 
   const data = useMemo(() => {
+    const totalMessages = messages?.length || 1;
+
     const formattedData: CircleData[] = userProfiles
       .filter((profile) => profile !== null && profile?.photoURL)
-      .map((profile) => ({
-        id: profile?.displayName.charAt(0) || "",
-        value: 1,
-        photoURL: profile?.photoURL || "",
-        displayName: profile?.displayName || "",
-      }));
+      .map((profile) => {
+        const userMessages =
+          messages?.filter((message) => message.sender === user?.uid) || [];
+        const messagePercentage = (userMessages.length / totalMessages) * 100;
+
+        console.log(messagePercentage, totalMessages);
+        return {
+          id: profile?.displayName.charAt(0) || "",
+          value: messagePercentage,
+          photoURL: profile?.photoURL || "",
+          displayName: profile?.displayName || "",
+        };
+      });
+
     return {
       id: "group",
       children: formattedData,
-      value: 1,
+      value: 100,
       displayName: "",
       photoURL: "",
     };
-  }, [userProfiles]);
+  }, [messages, user?.uid, userProfiles]);
 
   return (
     <CirclePacker
