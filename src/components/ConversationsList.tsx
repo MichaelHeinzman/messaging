@@ -7,9 +7,10 @@ import CreateConversation from "./CreateConversation";
 
 type Props = {
   conversations: Conversation[] | null | undefined;
+  fromConversationsPage?: boolean;
 };
 
-const Messages = ({ conversations }: Props) => {
+const Messages = ({ conversations, fromConversationsPage }: Props) => {
   const [searchText, setSearchText] = useState("");
   const [create, setCreate] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);

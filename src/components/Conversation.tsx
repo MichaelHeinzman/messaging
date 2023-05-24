@@ -12,6 +12,8 @@ import { User } from "firebase/auth";
 import { User as UserType } from "../../typings";
 import Messages from "./Messages";
 import useGroupMemberProfiles from "@/hooks/useGroupMemberProfiles";
+import { useRecoilState } from "recoil";
+import { currentConversationState } from "@/atoms/chatAtom";
 
 const Conversation = ({
   id,
@@ -27,7 +29,9 @@ const Conversation = ({
   const [sending, setSending] = useState(false);
   const idRef = useRef(id);
   const userRef = useRef(user);
-
+  const [currentConversation, setCurrentConversation] = useRecoilState(
+    currentConversationState
+  );
   useEffect(() => {
     markMessageAsReadInGroup(id, recentMessage?.id || "", user?.uid || "");
   }, [id, recentMessage?.id, user?.uid]);
@@ -78,13 +82,16 @@ const Conversation = ({
     <section className="w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center py-5 px-3 space-y-5">
       {/* Title */}
       <div className="relative w-full h-10 flex justify-between">
-        <button className="w-1/4 h-full text-center text-xs sm:text-base px-2">
+        <button
+          className={`w-1/4 h-full text-center text-xs sm:text-base px-2 md:hidden`}
+          onClick={() => setCurrentConversation(null)}
+        >
           Back to Messages
         </button>
         <div className="w-full text-center font-inter pr-2 font-semibold text-white text-2xl">
           {name}
         </div>
-        <div className="w-1/4 h-full overflow-hidden flex items-center justify-end space-x-3">
+        <div className="hidden md:flex w-1/4 h-full overflow-hidden items-center justify-end space-x-3">
           {userProfiles.map((profile: UserType | null) => (
             <img
               key={profile?.id}
