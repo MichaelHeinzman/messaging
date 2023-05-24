@@ -11,6 +11,7 @@ import { Conversation as ConversationType } from "../../typings";
 import { useRecoilState } from "recoil";
 import { currentConversationState } from "@/atoms/chatAtom";
 import useConversations from "@/hooks/useConversations";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   const { loading, user, logout } = useAuth();
@@ -47,12 +48,10 @@ export default function Home() {
         {foundConversation && <Conversation {...foundConversation} />}
 
         <div className={`p-4 hidden justify-center items-center md:flex`}>
-          <button
-            className={`w-full h-full p-2 cursor-pointer border-2 border-solid border-white rounded-md`}
+          <UserCircleIcon
+            className="h-10 w-10 text-white cursor-pointer"
             onClick={logout}
-          >
-            Logout
-          </button>
+          />
         </div>
       </main>
     </div>

@@ -7,9 +7,10 @@ import { Conversation } from "../../typings";
 interface Props {
   conversationId: Conversation["id"];
   members: Conversation["members"];
+  setAddUserFalse: () => void;
 }
 
-const Messages = ({ conversationId, members }: Props) => {
+const Messages = ({ conversationId, members, setAddUserFalse }: Props) => {
   const { user } = useAuth();
   const { messages } = useMessageSnapshot(conversationId, user);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,10 @@ const Messages = ({ conversationId, members }: Props) => {
   };
 
   return (
-    <div className="w-full lg:w-[89%] max-h-full h-screen flex flex-col justify-start space-y-2 overflow-y-auto sm:px-3 md:px-6 sticky top-0 scrollbar">
+    <div
+      onClick={setAddUserFalse}
+      className="w-full lg:w-[89%] max-h-full h-screen flex flex-col justify-start space-y-2 overflow-y-auto sm:px-3 md:px-6 sticky top-0 scrollbar z-0"
+    >
       {messages?.map((message) => (
         <Message key={message.id} {...message} members={members} />
       ))}

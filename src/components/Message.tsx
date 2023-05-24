@@ -51,7 +51,7 @@ const Message = ({ sender, text, id, groupId, members }: Props) => {
       initial="hidden"
       animate={controls}
       variants={self ? variants.messageSelf : variants.message}
-      className="w-full flex flex-col"
+      className="w-full flex flex-col z-10"
     >
       <div
         className={`w-full  flex ${self ? "justify-end" : "justify-start"}`}
