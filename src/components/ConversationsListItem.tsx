@@ -38,7 +38,11 @@ const MessagesListItem = ({
 
   const handleDeleteGroup = () => leaveGroup(id, user?.uid || "");
   return (
-    <div className={`overflow-hidden h-full w-full `}>
+    <div
+      className={`overflow-hidden h-full w-full   ${
+        currentConversation?.id === id && "bg-[#ffffff26]"
+      }`}
+    >
       <div
         className={`relative rounded-md w-full h-20 flex flex-col transition-transform 300ms ${
           selected === id ? "-translate-x-1/3" : "translate-x-0"
@@ -80,15 +84,16 @@ const MessagesListItem = ({
               </p>
             </div>
           </div>
+          <div
+            className={`w-1/6 h-full z-10 ${
+              selected === id ? "hidden w-0" : "flex"
+            }`}
+            onMouseOver={handleHover}
+          ></div>
         </button>
+
         <div
-          className={`absolute w-1/6 h-full right-0 top-0 z-10 ${
-            selected === id ? "hidden w-0" : "absolute"
-          }`}
-          onMouseOver={handleHover}
-        ></div>
-        <div
-          className={`absolute w-5/6 h-full left-0 top-0 z-10 ${
+          className={`absolute w-3/6 h-full left-0 top-0 z-10 ${
             selected === id ? "w-full" : "hidden"
           }`}
           onMouseOver={handleLeave}

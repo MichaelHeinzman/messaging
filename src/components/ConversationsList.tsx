@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ConversationsListItem from "./ConversationsListItem";
-import { Conversation } from "../../typings";
+import { Conversation, RecentMessage } from "../../typings";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import useAuth from "@/hooks/useAuth";
 import CreateConversation from "./CreateConversation";
@@ -12,7 +12,7 @@ type Props = {
 const Messages = ({ conversations }: Props) => {
   const [searchText, setSearchText] = useState("");
   const [create, setCreate] = useState(false);
-  const [selected, setSelected] = useState<String | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
 
   const filteredConversations = conversations?.filter((conversation) => {
     // Filter based on conversation name
@@ -27,6 +27,26 @@ const Messages = ({ conversations }: Props) => {
 
     return nameMatches || membersMatch;
   });
+
+  // Sort conversations based on unread messages
+  const sortConversations = (a: Conversation, b: Conversation) => {
+    const aHasUnread = hasUnreadMessages(a.recentMessage);
+    const bHasUnread = hasUnreadMessages(b.recentMessage);
+
+    if (aHasUnread && !bHasUnread) {
+      return -1; // a comes before b
+    } else if (!aHasUnread && bHasUnread) {
+      return 1; // b comes before a
+    } else {
+      return 0; // no change in order
+    }
+  };
+
+  const hasUnreadMessages = (message: RecentMessage | null) => {
+    return message && !message.readBy?.read.includes(user?.uid || "");
+  };
+
+  const { user } = useAuth();
 
   return (
     <section className="order-r-2  border-[#ffffff85] h-full w-full space-y-3 py-2">
@@ -50,7 +70,7 @@ const Messages = ({ conversations }: Props) => {
         />
       </div>
       <div className="w-full p-2 max-h-screen overflow-y-auto pb-32 scrollbar-hide divide-y-2 divide-[#ffffff85] overflow-hidden">
-        {filteredConversations?.map((conversation) => (
+        {filteredConversations?.sort(sortConversations).map((conversation) => (
           <ConversationsListItem
             key={conversation.id}
             {...conversation}

@@ -65,12 +65,14 @@ export default function Home() {
 
         {foundConversation && <Conversation {...foundConversation} />}
 
-        <button
-          className="m-2 p-2 cursor-pointer border-2 border-solid border-white rounded-md"
-          onClick={logout}
-        >
-          Logout
-        </button>
+        <div className="p-4 flex justify-center items-center">
+          <button
+            className="w-full h-full p-2 cursor-pointer border-2 border-solid border-white rounded-md"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        </div>
       </main>
     </div>
   );

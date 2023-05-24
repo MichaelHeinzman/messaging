@@ -3,6 +3,7 @@ import { Conversation, User } from "../../typings";
 import { useMessageSnapshot } from "@/hooks/useMessageSnapshot";
 import useAuth from "@/hooks/useAuth";
 import CirclePacker from "./CirclePacker";
+import useGroupMemberProfiles from "@/hooks/useGroupMemberProfiles";
 
 type Props = {
   members: Conversation["members"];
@@ -19,20 +20,8 @@ interface CircleData {
 const GroupImageMembers = ({ members, groupId }: Props) => {
   const { user, getUserData } = useAuth();
   const { messages } = useMessageSnapshot(groupId, user);
+  const { userProfiles } = useGroupMemberProfiles(members);
 
-  const [userProfiles, setUserProfiles] = useState<(User | null)[]>([]);
-
-  useEffect(() => {
-    const fetchUserProfiles = async () => {
-      const filteredMembers = members.filter((member) => member !== user?.uid);
-      const profiles = await Promise.all(
-        filteredMembers.map((member: string) => getUserData(member))
-      );
-      setUserProfiles(profiles);
-    };
-
-    fetchUserProfiles();
-  }, [getUserData, members, user]);
   const data = useMemo(() => {
     const totalMessages = messages?.length || 1;
 

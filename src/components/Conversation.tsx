@@ -3,19 +3,35 @@ import Message from "./Message";
 import { Conversation } from "../../typings";
 import useAuth from "@/hooks/useAuth";
 import { Timestamp } from "firebase/firestore";
-import { sendMessageInGroup, updateTypingArray } from "@/firestore/firestore";
+import {
+  markMessageAsReadInGroup,
+  sendMessageInGroup,
+  updateTypingArray,
+} from "@/firestore/firestore";
 import { useBeforeUnload } from "@/hooks/useBeforeUnload";
 import { User } from "firebase/auth";
+import { User as UserType } from "../../typings";
 import Messages from "./Messages";
+import useGroupMemberProfiles from "@/hooks/useGroupMemberProfiles";
 
-const Conversation = ({ id, name, typing: typingArray }: Conversation) => {
+const Conversation = ({
+  id,
+  name,
+  typing: typingArray,
+  members,
+  recentMessage,
+}: Conversation) => {
   const { user } = useAuth();
+  const { userProfiles } = useGroupMemberProfiles(members);
   const [message, setMessage] = useState<string>("");
   const [typing, setTyping] = useState(false);
   const [sending, setSending] = useState(false);
   const idRef = useRef(id);
   const userRef = useRef(user);
 
+  useEffect(() => {
+    markMessageAsReadInGroup(id, recentMessage?.id || "", user?.uid || "");
+  }, [id, recentMessage?.id, user?.uid]);
   useBeforeUnload(() =>
     updateTypingArray(idRef.current, userRef.current, "remove")
   );
@@ -24,8 +40,7 @@ const Conversation = ({ id, name, typing: typingArray }: Conversation) => {
     if (message.length > 0 && typing === false) {
       setTyping(true);
       if (!typingArray.some((user2: User) => user2.uid === user?.uid))
-        console.log(typingArray);
-      updateTypingArray(id, user, "add");
+        updateTypingArray(id, user, "add");
     }
 
     if (message.length === 0 && typing === true) {
@@ -63,12 +78,22 @@ const Conversation = ({ id, name, typing: typingArray }: Conversation) => {
   return (
     <section className="w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center py-5 px-3 space-y-5">
       {/* Title */}
-      <div className="relative w-full h-10 flex justify-center">
-        <button className="absolute left-0 md:hidden h-full text-center text-xs sm:text-base px-2">
+      <div className="relative w-full h-10 flex justify-between">
+        <button className="w-1/4 h-full text-center text-xs sm:text-base px-2">
           Back to Messages
         </button>
-        <div className="text-center font-inter pr-2 font-semibold text-white text-2xl">
+        <div className="w-full text-center font-inter pr-2 font-semibold text-white text-2xl">
           {name}
+        </div>
+        <div className="w-1/4 h-full overflow-hidden flex items-center justify-end space-x-3">
+          {userProfiles.map((profile: UserType | null) => (
+            <img
+              key={profile?.id}
+              src={profile?.photoURL}
+              alt="Member Profile"
+              className="h-10 w-10 rounded-full object-cover"
+            />
+          ))}
         </div>
       </div>
 

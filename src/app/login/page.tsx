@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingSpinner from "@/components/LoadingSpinner";
 import useAuth from "@/hooks/useAuth";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ const Login = (props: Props) => {
   const [login, setLogin] = useState(false);
   const { signIn } = useAuth();
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,7 +27,9 @@ const Login = (props: Props) => {
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
     if (login) {
+      setLoading(true);
       await signIn(email, password);
+      setLoading(false);
     } else {
       router.push("/signup");
     }
@@ -69,8 +72,9 @@ const Login = (props: Props) => {
           type="submit"
           className="w-3/4 rounded-lg py-3 font-semibold bg-gradient-to-br from-green-400 via-teal-400 to-blue-300 shadow-md"
           onClick={() => setLogin(true)}
+          disabled={loading ? true : false}
         >
-          Sign In
+          {loading ? <LoadingSpinner /> : "Login"}
         </button>
 
         <div className="">

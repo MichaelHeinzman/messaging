@@ -2,10 +2,11 @@
 
 import useAuth from "@/hooks/useAuth";
 import Head from "next/head";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { User } from "../../../typings";
 import { checkUsernameExists } from "@/firestore/firestore";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface Inputs {
   id?: string;
@@ -19,6 +20,7 @@ type Props = {};
 
 const Signup = (props: Props) => {
   const { signUp } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -29,7 +31,6 @@ const Signup = (props: Props) => {
   } = useForm<Inputs>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const handleProfilePictureChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -60,15 +61,17 @@ const Signup = (props: Props) => {
     username,
     photoURL,
   }) => {
+    setLoading(true);
     // Check if the username already exists
     const usernameExists = await checkUsernameExists(username);
-
     if (usernameExists) {
+      setLoading(false);
       // Username already exists, show an error message or take appropriate action
       console.log("Username already exists");
       return;
     }
     await signUp(email, password, username, photoURL);
+    setLoading(false);
   };
 
   return (
@@ -137,9 +140,10 @@ const Signup = (props: Props) => {
         </div>
         <button
           type="submit"
+          disabled={loading ? true : false}
           className="w-3/4 rounded-lg py-3 font-semibold bg-gradient-to-br from-green-400 via-teal-400 to-blue-300 shadow-md"
         >
-          Save Profile
+          {loading ? <LoadingSpinner /> : "Save Profile"}
         </button>
       </form>
     </div>
