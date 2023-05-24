@@ -46,11 +46,9 @@ export default function Home() {
 
         {foundConversation && <Conversation {...foundConversation} />}
 
-        <div className="p-4 flex justify-center items-center">
+        <div className={`p-4 hidden justify-center items-center md:flex`}>
           <button
-            className={`w-full h-full p-2 cursor-pointer border-2 border-solid border-white rounded-md ${
-              currentConversation === null && "hidden"
-            }`}
+            className={`w-full h-full p-2 cursor-pointer border-2 border-solid border-white rounded-md`}
             onClick={logout}
           >
             Logout

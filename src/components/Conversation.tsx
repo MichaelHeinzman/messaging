@@ -81,17 +81,18 @@ const Conversation = ({
   return (
     <section className="w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center py-5 px-3 space-y-5">
       {/* Title */}
-      <div className="relative w-full h-10 flex justify-between">
+      <div className="relative w-full h-10 flex md:justify-between">
         <button
           className={`w-1/4 h-full text-center text-xs sm:text-base px-2 md:hidden`}
           onClick={() => setCurrentConversation(null)}
         >
           Back to Messages
         </button>
-        <div className="w-full text-center font-inter pr-2 font-semibold text-white text-2xl">
+        <div className="w-1/4  md:flex order-2 md:order-1"></div>
+        <div className="w-full text-center font-inter pr-2 font-semibold text-white text-2xl sm:order-1 md:order-2">
           {name}
         </div>
-        <div className="hidden md:flex w-1/4 h-full overflow-hidden items-center justify-end space-x-3">
+        <div className="hidden md:flex w-1/4 h-full overflow-hidden items-center justify-end space-x-3 order-3">
           {userProfiles.map((profile: UserType | null) => (
             <img
               key={profile?.id}
