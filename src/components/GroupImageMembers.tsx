@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useId } from "react";
 import { Conversation, User } from "../../typings";
 import { useMessageSnapshot } from "@/hooks/useMessageSnapshot";
 import useAuth from "@/hooks/useAuth";
@@ -33,35 +33,30 @@ const GroupImageMembers = ({ members, groupId }: Props) => {
 
     fetchUserProfiles();
   }, [getUserData, members, user]);
-
   const data = useMemo(() => {
     const totalMessages = messages?.length || 1;
 
-    const formattedData: CircleData[] = userProfiles
-      .filter((profile) => profile !== null && profile?.photoURL)
-      .map((profile) => {
-        const userMessages =
-          messages?.filter((message) => message.sender === user?.uid) || [];
-        const messagePercentage = (userMessages.length / totalMessages) * 100;
+    const formattedData: CircleData[] = userProfiles.map((profile) => {
+      const userMessages =
+        messages?.filter((message) => message.sender === user?.uid) || [];
+      const messagePercentage = (userMessages.length / totalMessages) * 100;
 
-        console.log(messagePercentage, totalMessages);
-        return {
-          id: profile?.displayName.charAt(0) || "",
-          value: messagePercentage,
-          photoURL: profile?.photoURL || "",
-          displayName: profile?.displayName || "",
-        };
-      });
+      return {
+        id: profile?.id || "",
+        value: messagePercentage,
+        photoURL: profile?.photoURL || "",
+        displayName: profile?.displayName.charAt(0) || "",
+      };
+    });
 
     return {
-      id: "group",
+      id: groupId,
       children: formattedData,
       value: 100,
       displayName: "",
       photoURL: "",
     };
-  }, [messages, user?.uid, userProfiles]);
-
+  }, [groupId, messages, user?.uid, userProfiles]);
   return (
     <CirclePacker
       data={data}

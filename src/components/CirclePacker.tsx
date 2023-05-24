@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  pack,
-  hierarchy,
-  HierarchyCircularNode,
-  HierarchyCircularLink,
-} from "d3-hierarchy";
+import { pack, hierarchy } from "d3-hierarchy";
 import { scaleLinear } from "d3-scale";
 
 interface UserProfile {
@@ -45,7 +40,7 @@ const CirclePack: React.FC<CirclePackProps> = ({
   const radiusScale = scaleLinear()
     .domain([0, maxRadius])
     .range([5, Math.min(width, height) / 2]);
-
+  console.log(data);
   return (
     <svg
       width={width}
@@ -53,36 +48,35 @@ const CirclePack: React.FC<CirclePackProps> = ({
       className={`rounded-full bg-${backgroundColor}`}
     >
       {nodes.map((node, index) => (
-        <g key={index} transform={`translate(${node.x},${node.y})`}>
+        <g
+          key={node.data.id + index}
+          transform={`translate(${node.x},${node.y})`}
+        >
           <circle
             r={
               data.children?.length === 1
                 ? radiusScale(maxRadius / 2)
                 : radiusScale(node.r || 0)
             }
-            fill={node.data.photoURL ? `url(#image-${index})` : "transparent"}
+            fill={
+              node.data.photoURL
+                ? `url(#image-${node.data.id}-${index})`
+                : "none"
+            }
           />
           {node.data.photoURL ? (
             <defs>
               <pattern
-                id={`image-${index}`}
+                id={`image-${node.data.id}-${index}`}
                 x="0"
                 y="0"
                 width="100%"
                 height="100%"
               >
                 <image
-                  x={
-                    data.children?.length === 1
-                      ? -radiusScale(maxRadius)
-                      : -radiusScale(node.r || 0)
-                  }
-                  y={
-                    data.children?.length === 1
-                      ? -radiusScale(maxRadius)
-                      : -radiusScale(node.r || 0)
-                  }
-                  className="w-full h-full object-cover"
+                  x={-radiusScale(node.r || 0)}
+                  y={-radiusScale(node.r || 0)}
+                  className="w-full h-full"
                   href={node.data.photoURL}
                   preserveAspectRatio="xMidYMid meet"
                 />

@@ -158,6 +158,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data() as UserType;
+        userData.id = userDocSnap.id;
         return userData;
       } else {
         console.log("User not found.");
