@@ -30,8 +30,6 @@ const Login = (props: Props) => {
       setLoading(true);
       await signIn(email, password);
       setLoading(false);
-    } else {
-      router.push("/signup");
     }
   };
 
@@ -80,9 +78,8 @@ const Login = (props: Props) => {
         <div className="">
           New to messaging app?{" "}
           <button
-            type="submit"
             className="text-white hover:underline"
-            onClick={() => setLogin(false)}
+            onClick={() => router.push("/signup")}
           >
             Sign up now
           </button>

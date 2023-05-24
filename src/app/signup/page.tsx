@@ -1,12 +1,12 @@
 "use client";
 
-import useAuth from "@/hooks/useAuth";
-import Head from "next/head";
-import React, { useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { User } from "../../../typings";
-import { checkUsernameExists } from "@/firestore/firestore";
+import { useDropzone } from "react-dropzone";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Head from "next/head";
+import { checkUsernameExists } from "@/firestore/firestore";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useAuth from "@/hooks/useAuth";
 
 interface Inputs {
   id?: string;
@@ -17,10 +17,10 @@ interface Inputs {
 }
 
 type Props = {};
-
 const Signup = (props: Props) => {
   const { signUp } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
 
   const {
     register,
@@ -30,30 +30,19 @@ const Signup = (props: Props) => {
     watch,
   } = useForm<Inputs>();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleProfilePictureChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  const onDrop = (acceptedFiles: File[]) => {
+    setFile(acceptedFiles[0]);
     const reader = new FileReader();
-
     reader.onload = (e: ProgressEvent<FileReader>) => {
       const result = e.target?.result;
       if (typeof result === "string") {
         setValue("photoURL", result);
       }
     };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    reader.readAsDataURL(acceptedFiles[0]);
   };
 
-  const openFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     email,
@@ -89,25 +78,23 @@ const Signup = (props: Props) => {
         </div>
         <div className="space-y-4">
           <label className="inline-block w-full">
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={handleProfilePictureChange}
-              ref={fileInputRef}
-            />
-            <img
-              src={
-                watch("photoURL") ||
-                "https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg"
-              }
-              alt="profile"
+            <div
+              {...getRootProps()}
               className="rounded-full h-32 w-32 cursor-pointer"
-              onClick={openFileInput}
-            />
+            >
+              <input {...getInputProps()} />
+              {file ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="profile"
+                  className="rounded-full h-32 w-32"
+                />
+              ) : (
+                <span>Drag and drop or click to upload profile picture</span>
+              )}
+            </div>
           </label>
         </div>
-
         <div className="space-y-4">
           <label className="inline-block w-full">
             <input
@@ -140,7 +127,7 @@ const Signup = (props: Props) => {
         </div>
         <button
           type="submit"
-          disabled={loading ? true : false}
+          disabled={loading}
           className="w-3/4 rounded-lg py-3 font-semibold bg-gradient-to-br from-green-400 via-teal-400 to-blue-300 shadow-md"
         >
           {loading ? <LoadingSpinner /> : "Save Profile"}
