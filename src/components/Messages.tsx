@@ -20,7 +20,10 @@ const Messages = ({ conversationId, members }: Props) => {
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "end",
+      });
     }
   };
 
