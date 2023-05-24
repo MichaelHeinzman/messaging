@@ -50,7 +50,7 @@ const Messages = ({ conversations, fromConversationsPage }: Props) => {
   const { user } = useAuth();
 
   return (
-    <section className="order-r-2 border-[#ffffff85] h-full w-full space-y-3 py-2">
+    <section className="order-r-2 border-[#ffffff85] h-full w-full space-y-3 py-2 z-10">
       <div className="px-2 font-inter pr-2 font-semibold text-white text-2xl leading-10 flex justify-between">
         <p>Messages</p>
         <p>
