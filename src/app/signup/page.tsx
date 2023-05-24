@@ -7,7 +7,6 @@ import Head from "next/head";
 import { checkUsernameExists } from "@/firestore/firestore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import useAuth from "@/hooks/useAuth";
-
 interface Inputs {
   id?: string;
   email: string;
@@ -42,7 +41,10 @@ const Signup = (props: Props) => {
     reader.readAsDataURL(acceptedFiles[0]);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async ({
     email,
@@ -81,6 +83,7 @@ const Signup = (props: Props) => {
             <div
               {...getRootProps()}
               className="rounded-full h-32 w-32 cursor-pointer"
+              onClick={open}
             >
               <input {...getInputProps()} />
               {file ? (
