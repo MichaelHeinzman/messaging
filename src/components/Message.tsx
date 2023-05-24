@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Message, User } from "../../typings";
+import { Conversation, Message as MessageType, User } from "../../typings";
 import useAuth from "@/hooks/useAuth";
 import { profileImage } from "@/constants/default";
 import { CheckIcon, PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -9,7 +9,10 @@ import {
 } from "@/firestore/firestore";
 import useAnimateInView from "@/hooks/useAnimateInView";
 
-const Message = ({ sender, text, id, groupId }: Message) => {
+interface Props extends MessageType {
+  members: Conversation["members"];
+}
+const Message = ({ sender, text, id, groupId, members }: Props) => {
   const { user, getUserData } = useAuth();
   const { motion, ref, controls, variants } = useAnimateInView();
   const [writer, setWriter] = useState<User | null>(null);
@@ -18,7 +21,7 @@ const Message = ({ sender, text, id, groupId }: Message) => {
   const [editClicked, setEdit] = useState(false);
   const [read, setRead] = useState(false);
   const self = sender === user?.uid && true;
-
+  const isMember = members?.includes(sender);
   useEffect(() => {
     // Define an async function to use with the useEffect hook
     const fetchUserData = async () => {
@@ -75,7 +78,11 @@ const Message = ({ sender, text, id, groupId }: Message) => {
                 self && "pt-2"
               }`}
             >
-              {self ? "" : writer?.displayName}
+              {self
+                ? ""
+                : isMember
+                ? writer?.displayName
+                : writer?.displayName + " - Left Conversation"}
             </div>
             <div className="w-full max-w-full bg-[#FFFFFF26] border-2 border-solid border-white rounded-md p-5 break-all">
               {text}

@@ -28,28 +28,28 @@ const Messages = ({ conversations }: Props) => {
     return nameMatches || membersMatch;
   });
 
-  // Sort conversations based on unread messages
+  // Sort conversations based on sentAt timestamp
   const sortConversations = (a: Conversation, b: Conversation) => {
-    const aHasUnread = hasUnreadMessages(a.recentMessage);
-    const bHasUnread = hasUnreadMessages(b.recentMessage);
+    const aTimestamp = getRecentMessageTimestamp(a.recentMessage);
+    const bTimestamp = getRecentMessageTimestamp(b.recentMessage);
 
-    if (aHasUnread && !bHasUnread) {
+    if (aTimestamp > bTimestamp) {
       return -1; // a comes before b
-    } else if (!aHasUnread && bHasUnread) {
+    } else if (aTimestamp < bTimestamp) {
       return 1; // b comes before a
     } else {
       return 0; // no change in order
     }
   };
 
-  const hasUnreadMessages = (message: RecentMessage | null) => {
-    return message && !message.readBy?.read.includes(user?.uid || "");
+  const getRecentMessageTimestamp = (message: RecentMessage | null) => {
+    return message?.readBy.sentAt || 0;
   };
 
   const { user } = useAuth();
 
   return (
-    <section className="order-r-2  border-[#ffffff85] h-full w-full space-y-3 py-2">
+    <section className="order-r-2 border-[#ffffff85] h-full w-full space-y-3 py-2">
       <div className="px-2 font-inter pr-2 font-semibold text-white text-2xl leading-10 flex justify-between">
         <p>Messages</p>
         <p>

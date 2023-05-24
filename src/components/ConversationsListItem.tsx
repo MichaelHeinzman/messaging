@@ -49,7 +49,7 @@ const MessagesListItem = ({
         }`}
       >
         <button
-          className={`w-full h-full z-10 hover:bg-[#ffffff26] flex justify-between items-center space-x-2 pl-2`}
+          className={`w-full h-full z-10 hover:bg-[#ffffff26] flex justify-between items-center space-x-1 pl-2`}
           onClick={() => {
             setSelected(null);
             setCurrentConversation({
@@ -61,7 +61,7 @@ const MessagesListItem = ({
             });
           }}
         >
-          <div className="w-1/4 flex justify-between items-center space-x-2">
+          <div className="w-2/6 flex justify-between items-center space-x-2">
             <div className="w-full flex justify-center items-center pb-2">
               {!isMessageRead && (
                 <div className="rounded-full bg-[#00FFB2] w-2 h-2"></div>
@@ -73,7 +73,7 @@ const MessagesListItem = ({
               <GroupImageMembers members={members} groupId={id} />
             </div>
           </div>
-          <div className="w-3/4 h-full flex flex-col justify-start items-start p-1">
+          <div className="w-5/6 h-full flex flex-col justify-start items-start p-1">
             <div className="h-full text-left font-inter font-medium text-white text-lg line-clamp-1">
               {name}
             </div>

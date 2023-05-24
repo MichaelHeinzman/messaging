@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Message from "./Message";
-import { Conversation } from "../../typings";
+import { Conversation, Message } from "../../typings";
 import useAuth from "@/hooks/useAuth";
 import { Timestamp } from "firebase/firestore";
 import {
@@ -98,7 +97,7 @@ const Conversation = ({
       </div>
 
       {/* Messages */}
-      <Messages conversationId={id} />
+      <Messages conversationId={id} members={members} />
 
       {/* Typing */}
       {typingArray?.length > 0 && (
