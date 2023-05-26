@@ -82,7 +82,7 @@ const Conversation = ({
   };
 
   return (
-    <section className="relative w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center py-5 px-3 space-y-5 z-0">
+    <section className="relative w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center px-3 space-y-5 z-0">
       <div
         className="absolute w-screen h-screen z-0"
         onClick={() => setAddUser(false)}
