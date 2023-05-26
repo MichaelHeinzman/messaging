@@ -82,13 +82,13 @@ const Conversation = ({
   };
 
   return (
-    <section className="relative w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center px-3 space-y-5 z-0">
+    <section className="relative w-full md:w-3/4 lg:w-4/6 h-screen flex flex-col justify-start items-center px-3 space-y-5 z-0 pb-5">
       <div
         className="absolute w-screen h-screen z-0"
         onClick={() => setAddUser(false)}
       ></div>
       {/* Title */}
-      <div className="relative w-full h-10 flex md:justify-between">
+      <div className="relative w-full h-8 flex md:justify-between">
         <button
           className={`w-1/4 h-full text-center text-xs sm:text-base px-2 md:hidden`}
           onClick={() => setCurrentConversation(null)}

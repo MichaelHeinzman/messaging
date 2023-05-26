@@ -31,12 +31,12 @@ export default function Home() {
   if (loading) return null;
 
   return (
-    <div className="w-full h-screen max-h-screen overflow-hidden">
+    <div className="w-screen h-screen max-h-screen overflow-hidden">
       <Head>
         <title>Messages - Messaging</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-start items-start h-full pt-5">
+      <main className="flex justify-between items-start h-full pt-5 w-full">
         <div
           className={`flex w-full md:w-1/3 lg:w-1/5 h-full ${
             currentConversation !== null && "hidden md:flex "
@@ -47,7 +47,7 @@ export default function Home() {
 
         {foundConversation && <Conversation {...foundConversation} />}
 
-        <div className={`p-4 hidden justify-center items-center md:flex`}>
+        <div className={`p-4 hidden justify-end items-center md:flex z-20`}>
           <UserCircleIcon
             className="h-10 w-10 text-white cursor-pointer"
             onClick={logout}
