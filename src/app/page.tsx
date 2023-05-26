@@ -36,7 +36,7 @@ export default function Home() {
         <title>Messages - Messaging</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-between items-start h-full pt-5 w-full">
+      <main className="flex justify-between items-start h-full pt-2 w-full">
         <div
           className={`flex w-full md:w-1/3 lg:w-1/5 h-full ${
             currentConversation !== null && "hidden md:flex "

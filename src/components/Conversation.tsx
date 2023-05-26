@@ -88,7 +88,7 @@ const Conversation = ({
         onClick={() => setAddUser(false)}
       ></div>
       {/* Title */}
-      <div className="relative w-full h-8 flex md:justify-between">
+      <div className="relative w-full flex md:justify-between">
         <button
           className={`w-1/4 h-full text-center text-xs sm:text-base px-2 md:hidden`}
           onClick={() => setCurrentConversation(null)}
