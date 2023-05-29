@@ -100,7 +100,7 @@ const Conversation = ({
           {name}
         </div>
         <div className="relative hidden md:flex w-1/4 h-full items-center justify-end space-x-3 order-3">
-          <div className="overflow-hidden md:flex w-full items-center justify-end space-x-3">
+          <div className="md:flex w-full items-center justify-end space-x-3">
             {userProfiles.map((profile: UserType | null) => (
               <img
                 key={profile?.id}
@@ -115,7 +115,7 @@ const Conversation = ({
             className="h-10 w-10 text-white cursor-pointer"
             onClick={() => setAddUser(true)}
           />
-          {addUser && <AddUserModal />}
+          {addUser && <AddUserModal members={members} groupId={id} />}
         </div>
       </div>
 

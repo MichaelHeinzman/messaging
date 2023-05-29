@@ -388,3 +388,23 @@ export const updateTypingArray = async (
     console.error("Error updating typing array:", error);
   }
 };
+
+export const updateGroupMembers = async (
+  groupId: Conversation["id"],
+  members: Conversation["members"]
+) => {
+  console.log("MEMBERS>>>", members);
+  try {
+    const groupDocRef = doc(db, "groups", groupId);
+    const groupSnapshot = await getDoc(groupDocRef);
+
+    if (groupSnapshot.exists()) {
+      await updateDoc(groupDocRef, { members: members });
+      console.log("Group members updated successfully.");
+    } else {
+      console.log("Group not found.");
+    }
+  } catch (error) {
+    console.error("Error updating group members:", error);
+  }
+};
